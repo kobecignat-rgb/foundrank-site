@@ -339,10 +339,10 @@ form.addEventListener('submit',function(e){
   var data={name:String(d.get('name')).trim(),phone:String(d.get('phone')).trim(),company:String(d.get('company')||'').trim(),website:String(d.get('website')||''),lang:lang,page:location.href};
   function mail(){var subj=(lang==='ru'?'Заявка на анализ маркетинга':'Marketing analysis request')+' — '+data.name;
     location.href='mailto:'+EMAIL+'?subject='+encodeURIComponent(subj)+'&body='+encodeURIComponent([data.name,data.phone,data.company].filter(Boolean).join('\n'));}
-  if(!FORM_URL){mail(); form.classList.add('sent'); return;}
+  if(!FORM_URL){mail(); form.classList.add('sent'); if(typeof fbq==='function'){fbq('track','Lead');} return;}
   btn.disabled=true; btn.textContent=I18N[lang].send;
   fetch(FORM_URL,{method:'POST',mode:'no-cors',body:new URLSearchParams(data)})
-    .then(function(){form.classList.add('sent');})
+    .then(function(){form.classList.add('sent'); if(typeof fbq==='function'){fbq('track','Lead');}})
     .catch(function(){btn.disabled=false; btn.textContent=I18N[lang].cta; err.textContent=I18N[lang].fail;});
 });
 })();
